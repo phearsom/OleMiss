@@ -16,7 +16,7 @@
 
 module HW01
    (
-	prodSqSmall, xor      
+     prodSqSmall, xor, implies     
     )
 
 where
