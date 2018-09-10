@@ -1,0 +1,19 @@
+Steps for Project 1.
+
+	Build Robot to navigate: 
+	Use sensor to determine state of robot:
+	Possible states:
+		Stopped
+		Moving
+		Blocked Front
+			Is Right Clear
+				Turn Right
+			Is Left Clear
+				Turn Left
+			TurnAround?
+				turnAround()
+		Room to turn
+			yes -> Turn
+			no  -> Backup
+		
+		

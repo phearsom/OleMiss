@@ -25,8 +25,10 @@ public class Robot {
 		
 		while((Button.getButtons() != Button.ID_ESCAPE)){
 			
-				
-			Motor.C.forward();
+			if(sample[0] > .5)	
+				Motor.C.forward();	
+			else if(sample[0] < .5)
+				Sound.beep();
 			
 		}
 		
