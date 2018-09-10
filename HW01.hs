@@ -39,7 +39,9 @@ xor (a,b) = if a == b then False else True
  
 
 -- implies
--- Develop a Haskell Boolean function implies that takes two Booleans p and q and returns the Boolean result p \Rightarrow q (i.e. logical implication). That is, if p is True and q is False, then the result is False; otherwise, the result is True.
+-- Develop a Haskell Boolean function implies that takes two Booleans p and q and returns the Boolean result p
+-- Rightarrow q (i.e. logical implication).
+-- That is, if p is True and q is False, then the result is False; otherwise, the result is True.
 
 implies :: (Bool,Bool) -> Bool 
 implies (a,b) 
