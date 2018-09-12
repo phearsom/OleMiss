@@ -72,9 +72,10 @@ subTax a b
 -- (month, day, year)
 feb :: (Int,Int,Int) -> Bool
 feb (m,d,y)
-  | y mod 2 == 1 = d <= 28
-  | y mod 400 == 0 = d <= 29
-  | y mod 100 == 0 = d <= 28
+  | y `mod`   4 == 1 = d <= 28
+  | y `mod` 400 == 0 = d <= 29
+    | y `mod` 100 == 0 = d <= 28
+    | y `mod` 2 == 0 = d <= 28
   
 
   
@@ -85,8 +86,9 @@ validMonth (m,d,y)
 
 validDay :: (Int,Int,Int) -> Bool
 validDay (m,d,y) 
-  | m < 0 || m > 12 = error
-  | d < 28 || d > 31 = error
+  | m < 0 || m > 12 = error ""
+  | d < 28 || d > 31 = error ""
+  | otherwise = validMonth (m,d,y)
   
 
 -- -- ELIFP Ch. 5, Ex. 12
