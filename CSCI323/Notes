@@ -1,0 +1,14 @@
+bash script.sh
+bash ./script.sh
+
+read <varname>  -- get input from user
+
+declare -i <number> is an integer --- declares integers in bash
+declare -a <indices> is an array --- this is statically typed, 
+
+bc -- bash calculator 
+
+var1=[1+5] will return the value 6 when echo'd
+
+pg 278 of BIBLE to finish scripts
+
