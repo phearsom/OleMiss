@@ -1,0 +1,7 @@
+1. PS1=`uptime`
+
+2. The PATH is reset because the default configuration wasn't changed, just the session was. The default path is located in etc/profile.
+
+3. With -9 , no output. With -15 , also no output? -9 is an immediate termination... -15 is a graceful close.
+
+
