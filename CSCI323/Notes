@@ -13,3 +13,43 @@ var1=[1+5] will return the value 6 when echo'd
 pg 278 of BIBLE to finish scripts
 
 
+dmesg --- kernel buffer
+
+lspci -- list pci
+lsusb -- list usb
+
+tail - last 10 lines of file ... 
+        -f realtime output.
+
+
+df -h  outputs disk space usage on drives.
+
+
+
+*****************************************************************
+*****************************************************************
+******************** TEST REVIEW ********************************
+*****************************************************************
+*****************************************************************
+
+1. The free is free to change (tinker)
+2. Not an advantage of hybrid -- (( look it up))
+3. Richard stalin
+4. 1 of four freedoms of gnu if needing to change. 
+5. Linux is the kernel.... 
+6. Red hat and debian became popular  both had good package manager installer.
+7. Bash is based on bourne shell.
+8. SSH is secure protocool to access shell.
+9. echo shell
+10. valid ls command --both
+11. .profile is Path 
+12. prepend $ before calling variable. 
+13. alias command is a shortcut to other commands
+14. /var/ for log files.
+15. 2>> append standard error to log file
+16. sticky bit prevents other people from delete.   3 SPECIAL BITS TO KNOW! KNOW EM!.
+17. go +rw    || add read and write to group and other.
+18. top is dyamic ... ps is static
+19. man ps and look for section STATE ........ D S T Red
+SCALE = FLOATING POINT 
+echo ${#array1[*]}
