@@ -26,30 +26,41 @@ public class Project1 {
 		
 		// Thread or process handling Navigation
 		Navigate(eyes,wheels);
+		eyes.close();
 		
 	}
 	public static void Navigate(EV3UltrasonicSensor eyes, twoMotors wheels){
 		float [] sample = new float [eyes.sampleSize()];
+		float [] lookLeft = new float [1];
+		float [] lookRight = new float [1];
+		eyes.fetchSample(sample, 0);
+		
+		while((Button.getButtons() != Button.ID_ESCAPE)) {
+			wheels.forward();
+			eyes.fetchSample(sample, 0);
+			if(sample[0] < .3) {
+				
+				wheels.stop();
+				wheels.leftTurn();
+				eyes.fetchSample(lookLeft, 0);
+				wheels.turnAround();
+				eyes.fetchSample(lookRight, 0);
+				if( lookLeft[0] < lookRight[0] ) {
+					//wheels.forward();
+				} else if(lookRight[0] < lookLeft[0]) {
+					wheels.turnAround();
+					//wheels.forward();
+				} else {
+					wheels.rightTurn();
+				}
+				
+			}
+			
+			
+			
+		}
 		
 		
-		wheels.forward();
-		Delay.msDelay(3000);
-		wheels.leftTurn();
-		Delay.msDelay(2000);
-		wheels.forward();
-		Delay.msDelay(3000);
-		wheels.rightTurn();
-		Delay.msDelay(2000);
-		wheels.forward();
-		Delay.msDelay(3000);
-		wheels.backUp();
-		Delay.msDelay(3000);
-		wheels.stop();
-		Delay.msDelay(3000);
-		wheels.turnAround();
-		Delay.msDelay(2000);
-		wheels.forward();
-		Delay.msDelay(3000);
 		
 	}
 

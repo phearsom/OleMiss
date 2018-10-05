@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HelloClass/HelloClass.iml" filepath="$PROJECT_DIR$/HelloClass/HelloClass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Navigation/Navigation.iml" filepath="$PROJECT_DIR$/Navigation/Navigation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Robot/Robot.iml" filepath="$PROJECT_DIR$/Robot/Robot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Touch/Touch.iml" filepath="$PROJECT_DIR$/Touch/Touch.iml" />
+    </modules>
+  </component>
+</project>

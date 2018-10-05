@@ -14,11 +14,11 @@ public class twoMotors {
 	}
 	public void leftTurn(){
 		stop();
-		Right.rotate(360,true);
+		Right.rotate(180,true);
 	}
 	public void rightTurn(){
 		stop();
-		Left.rotate(360,true);
+		Left.rotate(180,true);
 	}
 	public void backUp(){
 		Left.backward();
