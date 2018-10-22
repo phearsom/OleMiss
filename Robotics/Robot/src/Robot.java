@@ -22,14 +22,24 @@ public class Robot {
 		float [] sample = new float [sonic.sampleSize()];
 		soundProvider.fetchSample(sample, 0);
 		System.out.println(Motor.D.getPosition()+"");
+		//Motor.C.setSpeed(360);
+		
 		
 		while((Button.getButtons() != Button.ID_ESCAPE)){
-			
-			if(sample[0] > .5)	
-				Motor.C.forward();	
-			else if(sample[0] < .5)
-				Sound.beep();
-			
+			soundProvider.fetchSample(sample, 0);
+			if(sample[0] > .25)	{
+				Motor.A.forward();	
+				Motor.D.forward();
+			}
+			else if(sample[0] < .25){
+				Motor.A.stop();
+				Delay.msDelay(5000);
+				
+			}
+			else if( sample[0] < .25){
+				Motor.A.backward();
+				Motor.D.backward();
+			}
 		}
 		
 		sonic.close();

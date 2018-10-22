@@ -5,22 +5,25 @@ import lejos.hardware.motor.NXTRegulatedMotor;
 @SuppressWarnings("unused")
 public class twoMotors {
 	
-	
+	private int degrees = 180;
 	private NXTRegulatedMotor Left;
 	private NXTRegulatedMotor Right;
+	
 	public twoMotors(NXTRegulatedMotor Left, NXTRegulatedMotor Right){
 		this.Left = Left;
 		this.Right = Right;
+		NXTRegulatedMotor list[] = {Right};
+		Left.synchronizeWith(list);
 	}
 	public void leftTurn(){
 		stop();
-		Right.rotate(180,true);
+		Right.forward();
 	}
 	public void rightTurn(){
 		stop();
-		Left.rotate(180,true);
+		Left.forward();
 	}
-	public void backUp(){
+	public void reverse(){
 		Left.backward();
 		Right.backward();
 	}
@@ -34,9 +37,11 @@ public class twoMotors {
 	}
 	public void turnAround(){
 		stop();
-		Left.rotate(-180,true);
-		Right.rotate(180,true);
+		Left.rotate(-degrees,true);
+		Right.rotate(degrees,true);
+
 	}
+	
 	
 
 }

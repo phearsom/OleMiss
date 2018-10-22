@@ -1,0 +1,17 @@
+import lejos.hardware.Button;
+
+
+public class Hello {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		System.out.println("Gregory Phillips\nHello World");
+		// TODO Auto-generated method stub
+		Button.waitForAnyPress();
+
+	}
+
+}

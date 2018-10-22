@@ -1,0 +1,178 @@
+/**
+ *  Copyright (C) 2011 apurv verma
+ *  P2008CS1002
+ *   
+ *  javac Sudoku.java
+ *  java Sudoku
+ */
+
+
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeSet;
+
+public class Sudoku {
+
+  int n;
+  int filled;
+  int[][] board;
+
+  boolean[][] row;
+  boolean[][] col;
+  boolean[][][] box;
+
+  /**
+   * row[0][1] = true denotes that the 0th row has element 1 written in it.
+   * row[i][0] does not mean anything.
+   * 
+   * col[0][1] = true denotes that 0th column has element 1 written in it.
+   * col[j][0] does not mean anything.
+   * 
+   * box[0][0][1] = true denotes that (0,0)th box contains 1 written in it.
+   * box[i][j][0] does not denote anything. 
+   * 
+   */
+
+  public Sudoku(int n){
+    this.n = n;
+
+    row = new boolean[n*n][n*n+1];
+    col = new boolean[n*n][n*n+1];
+    box = new boolean[n*n][n][n*n+1];
+
+        board = init3By3Board();
+
+    for(int i = 0; i<n*n; i++){
+      for(int j = 0; j<n*n; j++){
+        int elem = board[i][j];
+        for(int digit = 1; digit<= n*n; digit++){
+          if(elem == digit){
+            row[i][digit] = true;
+            col[j][digit] = true;
+            box[i/n][j/n][digit] = true;
+            filled++;
+          }
+        }
+      }
+    }
+  }
+
+  private int[][] init3By3Board() {
+
+    int[][] board ={
+    	{0,2,0,  0,7,0,  0,0,0},
+        {0,0,0,  0,0,3,  0,0,9},
+        {6,0,0,  8,0,0,  1,0,0},
+
+        {0,0,9,  0,0,0,  7,0,0},
+        {0,5,0,  0,0,0,  0,6,0},
+        {0,0,4,  0,0,0,  8,0,0},
+
+        {0,0,3,  0,0,9,  0,0,4},
+        {8,0,0,  5,0,0,  0,0,0},
+        {0,0,0,  0,6,0,  0,2,0},
+
+    };
+    return board;
+  }
+
+  public void printBoard(){
+    for(int i = 0; i<n*n; i++){
+      for(int j=0; j<n*n; j++){
+        System.out.print(board[i][j]+" ");
+      }
+      System.out.println();
+    }
+  }
+
+  public void fillBoard(){
+    if(filled == n*n*n*n){
+      printBoard();
+      System.exit(0);
+      return;			
+
+    }
+    int min = Integer.MAX_VALUE;
+    int min_i = -1;
+    int min_j = -1;
+    TreeSet<Integer> possibleValues = null;
+
+    //Find the position which has the minimum remaining values.
+    for(int i = 0; i<n*n; i++){
+      for(int j = 0; j<n*n; j++){
+        if(board[i][j]!=0){continue;}
+        TreeSet<Integer> t = findRemainingValues(i, j);
+
+        if(min>t.size()){
+          min = t.size();
+          possibleValues = t;
+          min_i = i;
+          min_j = j;
+        }				
+      }
+    }
+
+    //Try to fill that position with all plausible values found.
+    for(Integer x:possibleValues){
+      board[min_i][min_j] = x;
+      row[min_i][x] = true;
+      col[min_j][x] = true;
+      box[min_i/n][min_j/n][x] = true;
+      filled++;
+      fillBoard();
+      filled--;
+      box[min_i/n][min_j/n][x] = false;
+      col[min_j][x] = false;
+      row[min_i][x] = false;
+      board[min_i][min_j] = 0;
+    }
+  }
+
+
+  private TreeSet<Integer> findRemainingValues(int r, int c){
+    int box_row = r/n;
+    int box_col = c/n;
+    TreeSet<Integer> remValues = new TreeSet<Integer>();			
+
+    HashMap<Integer, Integer> rowMap = new HashMap<Integer, Integer>();
+    HashMap<Integer, Integer> colMap = new HashMap<Integer, Integer>();
+    HashMap<Integer, Integer> boxMap = new HashMap<Integer, Integer>();
+
+    for(int digit = 1; digit<=n*n; digit++){
+      if(!row[r][digit]){ //digit does not occur in rth row.
+        rowMap.put(digit, digit);
+        remValues.add(digit);
+      }
+
+      if(!col[c][digit]){
+        colMap.put(digit, digit);
+        remValues.add(digit);
+      }
+
+      if(!box[box_row][box_col][digit]){
+        boxMap.put(digit, digit);
+        remValues.add(digit);
+      }
+    }
+
+    TreeSet<Integer> possibleValues = new TreeSet<Integer>();
+
+    for(Integer value:remValues){
+      if(rowMap.get(value)!=null && colMap.get(value)!=null && boxMap.get(value)!=null){
+        possibleValues.add(value);
+      }
+    }
+
+    return possibleValues;
+  }
+
+
+
+  public static void main(String[] args) {
+    int size = 3;
+    Sudoku sodoku = new Sudoku(size);
+    sodoku.fillBoard();
+  }
+
+}

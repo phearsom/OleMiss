@@ -1,0 +1,139 @@
+import lejos.hardware.sensor.*;
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.port.*;
+import lejos.hardware.Button;
+import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.Motor;
+import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.Sound;
+import lejos.utility.Delay;
+import lejos.robotics.*;
+import lejos.robotics.chassis.WheeledChassis;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+
+import lejos.hardware.Bluetooth;
+import lejos.remote.nxt.NXTCommConnector;
+import lejos.remote.nxt.NXTConnection;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import lejos.hardware.Bluetooth;
+import lejos.remote.nxt.NXTCommConnector;
+import lejos.remote.nxt.NXTConnection;
+import lejos.utility.Delay;
+
+
+
+public class Project1 {
+
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		NXTCommConnector connector = Bluetooth.getNXTCommConnector();
+		NXTRegulatedMotor leftWheel = Motor.A;
+		NXTRegulatedMotor rightWheel = Motor.D;
+		
+		System.out.println("Waiting for connection ...");
+		NXTConnection con = connector.waitForConnection(0, NXTConnection.RAW);
+		System.out.println("Connected");
+
+		DataInputStream dis = con.openDataInputStream();
+		DataOutputStream dos = con.openDataOutputStream();
+		
+
+		byte[] n = new byte[8];
+		while (true){
+					try {
+						if (dis.read(n) == -1)
+							break;
+					} catch (EOFException e) {
+						break;
+					}
+					try {
+						System.out.println("Read " + n[0] + n[1] + n[2] + n[3] + n[4]
+								+ n[5] + n[6] + n[7]);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					dos.write(n);
+
+					dos.flush();
+				}
+			
+
+		Delay.msDelay(1000);
+
+		dis.close();
+		dos.close();
+		con.close();
+	
+
+		
+		// Initialization of sensors and motors
+		
+		Port port = LocalEV3.get().getPort("S1");
+		EV3UltrasonicSensor eyes = new EV3UltrasonicSensor(port);
+		SensorMode eye = (SensorMode) eyes.getDistanceMode();
+		twoMotors wheels = new twoMotors(leftWheel,rightWheel);
+		Motor.A.setSpeed(600);
+		Motor.D.setSpeed(600);
+		// Thread or process handling Navigation
+		Navigate(eyes,wheels);
+		
+		
+	}
+	public static void Navigate(SensorMode eye, twoMotors wheels){
+		float [] sample = new float [eye.sampleSize()];
+		float[] lookLeft = new float [eye.sampleSize()];
+		float [] lookRight = new float [eye.sampleSize()];
+		eye.fetchSample(sample, 0);
+		while((Button.getButtons() != Button.ID_ESCAPE)){    // Initial State
+			
+			eye.fetchSample(sample, 0);
+			
+			if(sample[0] < .3){
+				wheels.stop();
+				wheels.backUp();
+				Delay.msDelay(1000);
+				
+				//wheels.leftTurn();
+				
+				
+				eye.fetchSample(lookLeft, 0);
+				Delay.msDelay(1000);
+				wheels.rightTurn();
+				wheels.rightTurn();
+				Delay.msDelay(1000);
+				eye.fetchSample(lookRight, 0);
+				
+				
+				Delay.msDelay(1000);
+				// compare and decide which way to go.
+				if ( lookLeft[0] > lookRight [0] ){
+					wheels.turnAround();
+					Delay.msDelay(1000);
+					
+				} else{
+					
+				}
+			}
+			wheels.forward();
+			
+			
+		}
+		
+		
+		
+	}
+
+}
+
+

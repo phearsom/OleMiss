@@ -12,8 +12,8 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="b1c11ecf-4cc4-4e11-adb1-767f32492f63" />
-      <option name="name" value="b1c11ecf-4cc4-4e11-adb1-767f32492f63" />
+      <option name="id" value="5c53764c-be0b-445b-afca-1fc68346149e" />
+      <option name="name" value="5c53764c-be0b-445b-afca-1fc68346149e" />
       <option name="url" value="https://lejos.sourceforge.io/tools/eclipse/plugin/ev3/" />
     </remote-repository>
   </component>

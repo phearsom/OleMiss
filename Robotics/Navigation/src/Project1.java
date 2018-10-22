@@ -1,67 +1,81 @@
-import lejos.hardware.sensor.*;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.port.*;
-import lejos.hardware.Button;
-import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
-import lejos.hardware.Sound;
 import lejos.utility.Delay;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
 
+import lejos.hardware.Bluetooth;
+import lejos.remote.nxt.NXTCommConnector;
+import lejos.remote.nxt.NXTConnection;
 
 public class Project1 {
 
+	static NXTRegulatedMotor leftWheel = Motor.A;
+	static NXTRegulatedMotor rightWheel = Motor.D;
+	static twoMotors wheels = new twoMotors(leftWheel, rightWheel);
+
 	/**
 	 * @param args
+	 * @throws IOException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
-		// Initialization of sensors and motors
-		NXTRegulatedMotor leftWheel = Motor.A;
-		NXTRegulatedMotor rightWheel = Motor.D;
-		Port port = LocalEV3.get().getPort("S1");
-		EV3UltrasonicSensor eyes = new EV3UltrasonicSensor(port);
-		twoMotors wheels = new twoMotors(leftWheel,rightWheel);
-		
-		// Thread or process handling Navigation
-		Navigate(eyes,wheels);
-		eyes.close();
-		
-	}
-	public static void Navigate(EV3UltrasonicSensor eyes, twoMotors wheels){
-		float [] sample = new float [eyes.sampleSize()];
-		float [] lookLeft = new float [1];
-		float [] lookRight = new float [1];
-		eyes.fetchSample(sample, 0);
-		
-		while((Button.getButtons() != Button.ID_ESCAPE)) {
-			wheels.forward();
-			eyes.fetchSample(sample, 0);
-			if(sample[0] < .3) {
-				
-				wheels.stop();
-				wheels.leftTurn();
-				eyes.fetchSample(lookLeft, 0);
-				wheels.turnAround();
-				eyes.fetchSample(lookRight, 0);
-				if( lookLeft[0] < lookRight[0] ) {
-					//wheels.forward();
-				} else if(lookRight[0] < lookLeft[0]) {
-					wheels.turnAround();
-					//wheels.forward();
-				} else {
-					wheels.rightTurn();
-				}
-				
+		NXTCommConnector connector = Bluetooth.getNXTCommConnector();
+
+		System.out.println("Waiting for connection ...");
+		NXTConnection con = connector.waitForConnection(0, NXTConnection.RAW);
+		System.out.println("Connected");
+
+		DataInputStream dis = con.openDataInputStream();
+		DataOutputStream dos = con.openDataOutputStream();
+		Motor.A.setSpeed(600);
+		Motor.D.setSpeed(600);
+
+		byte[] n = new byte[8];
+		while (true) {
+			try {
+				if (dis.read(n) == -1)
+					break;
+			} catch (EOFException e) {
+				break;
 			}
-			
-			
-			
+			try {
+				System.out.println("Read " + n[0] + n[1] + n[2] + n[3] + n[4]
+						+ n[5] + n[6] + n[7]);
+				Navigate(n[0]);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dos.write(n);
+
+			dos.flush();
 		}
-		
-		
-		
+
+		Delay.msDelay(1000);
+
+		dis.close();
+		dos.close();
+		con.close();
+
+		// Thread or process handling Navigation
+
+	}
+
+	public static void Navigate(byte num) {
+
+		if (num == 0) {
+			wheels.forward();
+
+		} else if (num == 1) {
+			wheels.leftTurn();
+		} else if (num == 2) {
+			wheels.rightTurn();
+		} else if (num == 3){
+			wheels.reverse();
+		}
 	}
 
 }
