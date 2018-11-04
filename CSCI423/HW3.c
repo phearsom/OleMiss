@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-void *avg_func(void *str);
-void *min_func(void *ptr);
-void *max_func(void *ptr);
+void *avg(void *str);
+void *min(void *ptr);
+void *max(void *ptr);
 
 double average;
 int smallest;
@@ -35,21 +35,21 @@ int main(int argc, char *argv[])
 
     numbers ds = {argc - 1, copy};
 
-    t1 = pthread_create(&thread1, NULL, (void *) avg_func, (void *) &ds);
+    t1 = pthread_create(&thread1, NULL, (void *) avg, (void *) &ds);
     if(t1)
     {
         fprintf(stderr,"Error - pthread_create() return code: %d\n", t1);
         exit(EXIT_FAILURE);
     }
 
-    t2 = pthread_create(&thread2, NULL, (void *) min_func, (void *) &ds);
+    t2 = pthread_create(&thread2, NULL, (void *) min, (void *) &ds);
     if(t2)
     {
         fprintf(stderr,"Error - pthread_create() return code: %d\n",t2);
         exit(EXIT_FAILURE);
     }
 
-    t3 = pthread_create(&thread3, NULL, (void *) max_func, (void *) &ds);
+    t3 = pthread_create(&thread3, NULL, (void *) max, (void *) &ds);
     if(t3)
     {
         fprintf(stderr,"Error - pthread_create() return code: %d\n", t3);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void *avg_func(void *ptr)
+void *avg(void *ptr)
 {
     numbers * copy;
     copy = (numbers *) ptr;
@@ -87,7 +87,7 @@ void *avg_func(void *ptr)
  / sz);
 }
 
-void *min_func(void *ptr)
+void *min(void *ptr)
 {
     numbers * copy;
     copy = (numbers *) ptr;
@@ -105,7 +105,7 @@ void *min_func(void *ptr)
     }
 }
 
-void *max_func(void *ptr)
+void *max(void *ptr)
 {
     numbers * copy;
     copy = (numbers *) ptr;
