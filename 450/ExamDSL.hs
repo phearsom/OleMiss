@@ -37,6 +37,7 @@ module ExamDSL where
     -- #A2
     lenQuestion :: Question -> Int
     lenQuestion (Ask [tag] text [choice]) = length [choice]
+
     -- #A3
     validQuestion :: Question -> Bool
     validQuestion (Ask [tag] text [choice]) = True
@@ -45,16 +46,22 @@ module ExamDSL where
     -- #A4
     hasTag :: Question -> Tag -> Bool
     hasTag (Ask [tag] text [choice]) tag2
+      | tag2 `elem` [] = False
       | tag2 `elem` [tag] = True
       | otherwise = False
     
-    -- #A5q0
-    eqBag :: Eq a => [a] -> [a] -> Bool
-    eqBag [a] [b] = [a] == [b]
+    -- -- #A5q0
+    -- eqBag :: Eq a => [a] -> [a] -> Bool
+    -- eqBag [a] [b]
+    --   | [a] == [b] = True
+    --   | otherwise = False
     
     -- #A6
-    -- instance Eq Question where
-    
+    instance Eq Question where
+    Ask [tag] _ _ == Ask [tag2] _ _ = True
+    Ask _ qText _ == Ask _ qText2 _ = True
+    Ask _ _ [choice] == Ask _ _ [choice2] = True
+    _ == _ = False
     
     -- #A7
     -- selectByTags :: [Tag] -> Exam -> Exam
@@ -90,6 +97,12 @@ module ExamDSL where
              [ Answer "CSci 323" False, 
                Answer "CSci 450" True, 
                Answer "CSci 525" False ]
+
+    q1 = Ask ["language","course"]
+              "What one of the following is used in CSci 450?"
+              [ Answer "Lua" False,
+                Answer "Elm" False,
+              Answer "Haskell" True ]
       
     e0 = Quiz "Curriclum Test" [
              Ask ["curriculum"]
