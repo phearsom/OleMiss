@@ -1,0 +1,8 @@
+  correctChoice :: Choice -> Bool
+    correctChoice (Answer choice True) = True
+    correctChoice (Answer choice False) = False
+
+
+       -- validQuestion :: Question -> Bool
+    -- validQuestion (Ask [tag] text) = True
+    -- validQuestion notValid = False
