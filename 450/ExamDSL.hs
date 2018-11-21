@@ -36,12 +36,12 @@ module ExamDSL where
     
     -- #A2
     lenQuestion :: Question -> Int
-    lenQuestion (Ask [tag] text [choice]) = length [choice]
+    lenQuestion (Ask [tag] text [choice]) = length ([choice])
 
     -- #A3
     validQuestion :: Question -> Bool
-    validQuestion (Ask [tag] text [choice]) = True
-    validQuestion notValid = False
+    validQuestion question = True
+    validQuestion _ = False
     
     -- #A4
     hasTag :: Question -> Tag -> Bool
@@ -50,11 +50,10 @@ module ExamDSL where
       | tag2 `elem` [tag] = True
       | otherwise = False
     
-    -- -- #A5q0
-    -- eqBag :: Eq a => [a] -> [a] -> Bool
-    -- eqBag [a] [b]
-    --   | [a] == [b] = True
-    --   | otherwise = False
+    -- #A5q0
+    eqBag :: Eq a => [a] -> [a] -> Bool
+    eqBag (x:xs) y = elem x y && eqBag xs y
+    equals x y = eqBag x y && eqBag y x
     
     -- #A6
     instance Eq Question where
@@ -64,15 +63,28 @@ module ExamDSL where
     _ == _ = False
     
     -- #A7
-    -- selectByTags :: [Tag] -> Exam -> Exam
-    -- selectByTags [tag] (Quiz title [questions]) = 
-    -- #A8
-    -- validExam :: Exam -> Bool 
+    selectByTags :: [Tag] -> Exam -> Exam
+    selectByTags [tag:xs] exam = exam
+    selectByTags [] exam = exam
+    selectByTags _ exam = exam
+    
+    
+      -- #A8
+    validExam :: Exam -> Bool 
+    validExam exam = True
+    validExam _ = False
     
     -- #A9
     
     -- Exercise Set B
-    -- makeKey :: Exam -> [(Int,Char)]
+    makeKey :: Exam -> [(Int,Char)]
+    makeKey (Quiz title [(Ask [tag] text [choice])]) = [(int, char)] 
+      where 
+        int = 1
+        a =  map correctChoice ([choice])
+        char = 'b'
+        
+       
     
     -- might be useful
     newline :: String
@@ -86,7 +98,8 @@ module ExamDSL where
     choice2html (Answer text _) = to_li text
     
     -- #B1
-    -- question2html :: Question -> HTML
+    question2html :: Question -> HTML
+    question2html (Ask [tag] text [choice] ) = to_body text
     
     -- #B2
     -- exam2html :: Exam -> HTML
